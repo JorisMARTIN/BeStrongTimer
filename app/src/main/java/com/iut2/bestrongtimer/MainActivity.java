@@ -18,26 +18,26 @@ import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String SELECTED_TRAINING = "selected_training";
+
+    FragmentManager fm;
+    LaunchEditDialog dialog;
+
     // DATA
     DatabaseClient db;
-
-    /*
-    List of Pair => Item 1 = Training / Item 2 = List of associated sequence.
-
-    Each sequence is a Pair of Item 1 = Sequence / Item 2 = List of associated Cycles
-     */
-    //  === ITEM 1 ===, ============== ITEM 2 =============
-    //                      === ITEM 1 ===, === ITEM 2 ===
     List<Training> allTrainings;
 
     // VIEW
     LinearLayout trainingsContainer;
     TextView anyTrainingAvailable;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        fm = getSupportFragmentManager();
 
         trainingsContainer = findViewById(R.id.training_layout_container);
         anyTrainingAvailable = findViewById(R.id.any_trainings_available_text);
@@ -47,6 +47,19 @@ public class MainActivity extends AppCompatActivity {
         getTrainings();
     }
 
+    @Override
+    protected void onResume() {
+
+
+
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        dismissDialog();
+        super.onPause();
+    }
 
     private void getTrainings() {
 
@@ -67,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
                     anyTrainingAvailable.setVisibility(View.INVISIBLE);
                 }
                 allTrainings = trainings;
+                // Open dialog if activity was restarted
                 initView();
             }
         }
@@ -103,13 +117,24 @@ public class MainActivity extends AppCompatActivity {
             layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    FragmentManager fm = getSupportFragmentManager();
-                    LaunchEditDialog dialog = LaunchEditDialog.newIntance(training);
-                    dialog.show(fm, "launch_edit_training");
+                    showDialog(training);
                 }
             });
 
             trainingsContainer.addView(layout);
+        }
+    }
+
+    private void showDialog(Training training) {
+        dismissDialog();
+
+        dialog = LaunchEditDialog.newIntance(training);
+        dialog.show(fm, "launch_edit_training");
+    }
+
+    private void dismissDialog() {
+        if (dialog != null) {
+            dialog.dismiss();
         }
     }
 

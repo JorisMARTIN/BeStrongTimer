@@ -36,4 +36,12 @@ public interface SequenceDAO {
     @Query("SELECT * FROM sequence")
     List<SequenceCycle> getCycles();
 
+    @Transaction
+    @Query("SELECT * FROM sequence WHERE id = (:id)")
+    SequenceCycle getCyclesFromSequenceId(int id);
+
+    @Transaction
+    @Query("SELECT * FROM sequence WHERE training_id = (:trainingId) ORDER BY pos")
+    List<SequenceCycle> getSequencesCycleFromTrainingId(int trainingId);
+
 }

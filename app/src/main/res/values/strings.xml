@@ -12,6 +12,8 @@
     <string name="submit">Valider</string>
     <string name="edit">Éditer</string>
     <string name="launch">Lancer</string>
+    <string name="stop">Pause</string>
+    <string name="resume">Reprendre</string>
 
     <!-- Activity form labels -->
     <string name="name">Nom</string>

@@ -47,15 +47,17 @@ public class DatabaseClient {
             db.execSQL("INSERT INTO training (name, description, setup_time, global_sequence_time, difficulty_average) VALUES(\"Test\", \"Test description\", 5000, 820000, 3.0);");
 
             // Sequence 1
-            db.execSQL("INSERT INTO sequence (training_id, name, description, difficulty, repetition, recovery_time, global_cycle_time) VALUES (1, \"Test sequence 1\", \"Test Description sequence 1\", 2, 10, 60000, 150000);");
+            db.execSQL("INSERT INTO sequence (training_id, pos, name, description, difficulty, repetition, recovery_time, global_cycle_time) VALUES (1, 1, \"Test sequence 1\", \"Test Description sequence 1\", 2, 2, 7000, 150000);");
                 // Cycles
-                db.execSQL("INSERT INTO cycle (sequence_id, name, repetition, activity_time, recovery_time) VALUES (1, \"Pompes x 5\", 5, 10000, 5000);");
-                db.execSQL("INSERT INTO cycle (sequence_id, name, repetition, activity_time, recovery_time) VALUES (1, \"Abdos x 5\", 5, 10000, 5000);");
+                db.execSQL("INSERT INTO cycle (sequence_id, pos, name, repetition, activity_time, recovery_time) VALUES (1, 1, \"Pompes x 5\", 5, 5000, 3000);");
+                db.execSQL("INSERT INTO cycle (sequence_id, pos, name, repetition, activity_time, recovery_time) VALUES (1, 2, \"Abdos x 5\", 5, 5000, 3000);");
 
             // Sequence 2
-            db.execSQL("INSERT INTO sequence (training_id, name, description, difficulty, repetition, recovery_time, global_cycle_time) VALUES (1, \"Test sequence 2\", \"Test Description sequence 2\", 4, 5, 5000, 75000);");
+            db.execSQL("INSERT INTO sequence (training_id, pos, name, description, difficulty, repetition, recovery_time, global_cycle_time) VALUES (1, 2, \"Test sequence 2\", \"Test Description sequence 2\", 4, 1, 5000, 75000);");
                 // Cycles
-                db.execSQL("INSERT INTO cycle (sequence_id, name, repetition, activity_time, recovery_time) VALUES (2, \"Pompes x 5\", 5, 10000, 5000);");
+                db.execSQL("INSERT INTO cycle (sequence_id, pos, name, repetition, activity_time, recovery_time) VALUES (2, 1, \"Pompes x 5\", 5, 10000, 5000);");
+
+
         }
     };
 

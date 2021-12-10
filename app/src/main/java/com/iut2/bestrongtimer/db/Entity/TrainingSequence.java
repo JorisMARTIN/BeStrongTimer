@@ -15,4 +15,12 @@ public class TrainingSequence {
             entityColumn = "training_id"
     )
     public List<Sequence> sequences;
+
+    @Override
+    public String toString() {
+        return "TrainingSequence{" + "\n\t" +
+                "training=" + training + "\n\t" +
+                ", sequences=" + sequences + "\n" +
+                '}';
+    }
 }

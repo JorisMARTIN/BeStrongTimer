@@ -13,6 +13,9 @@ public class Sequence {
     @ColumnInfo(name = "training_id")
     private int trainingId;
 
+    @ColumnInfo(name = "pos")
+    private int pos;
+
     @ColumnInfo(name = "name")
     private String name;
 
@@ -26,10 +29,10 @@ public class Sequence {
     private int repetition;
 
     @ColumnInfo(name = "recovery_time")
-    private int recoveryTime;
+    private long recoveryTime;
 
     @ColumnInfo(name = "global_cycle_time")
-    private int globalCycleTime;
+    private long globalCycleTime;
 
     public int getId() {
         return id;
@@ -45,6 +48,14 @@ public class Sequence {
 
     public void setTrainingId(int trainingId) {
         this.trainingId = trainingId;
+    }
+
+    public int getPos() {
+        return pos;
+    }
+
+    public void setPos(int pos) {
+        this.pos = pos;
     }
 
     public String getName() {
@@ -79,33 +90,34 @@ public class Sequence {
         this.repetition = repetition;
     }
 
-    public int getRecoveryTime() {
+    public long getRecoveryTime() {
         return recoveryTime;
     }
 
-    public void setRecoveryTime(int recoveryTime) {
+    public void setRecoveryTime(long recoveryTime) {
         this.recoveryTime = recoveryTime;
     }
 
-    public int getGlobalCycleTime() {
+    public long getGlobalCycleTime() {
         return globalCycleTime;
     }
 
-    public void setGlobalCycleTime(int globalCycleTime) {
+    public void setGlobalCycleTime(long globalCycleTime) {
         this.globalCycleTime = globalCycleTime;
     }
 
     @Override
     public String toString() {
-        return "Sequence{" +
-                "id=" + id +
-                ", trainingId=" + trainingId +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", difficulty=" + difficulty +
-                ", repetition=" + repetition +
-                ", recoveryTime=" + recoveryTime +
-                ", globalCycleTime=" + globalCycleTime +
+        return "Sequence{" + "\n\t" +
+                "id=" + id + "\n\t" +
+                ", trainingId=" + trainingId + "\n\t" +
+                ", pos=" + pos + "\n\t" +
+                ", name='" + name + '\'' + "\n\t" +
+                ", description='" + description + '\'' + "\n\t" +
+                ", difficulty=" + difficulty + "\n\t" +
+                ", repetition=" + repetition + "\n\t" +
+                ", recoveryTime=" + recoveryTime + "\n\t" +
+                ", globalCycleTime=" + globalCycleTime + "\n" +
                 '}';
     }
 }

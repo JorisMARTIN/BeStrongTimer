@@ -15,7 +15,7 @@
         android:paddingBottom="10sp"
         android:text="@string/training_list_title"
         android:textColor="@color/white"
-        android:textSize="30sp"
+        android:textSize="@dimen/title_font_size"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

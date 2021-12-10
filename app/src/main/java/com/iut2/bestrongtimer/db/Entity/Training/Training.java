@@ -29,15 +29,15 @@ public class Training implements Parcelable {
     public Date creationDate;
 
     @ColumnInfo(name = "setup_time")
-    private int setupTime;
+    private long setupTime;
     
     @ColumnInfo(name = "global_sequence_time")
-    private int globalSequenceTime;
+    private long globalSequenceTime;
 
     @ColumnInfo(name = "difficulty_average")
     private float difficultyAverage;
 
-    Training(int id, String name, String description, Date creationDate, int setupTime, int globalSequenceTime, float difficultyAverage) {
+    Training(int id, String name, String description, Date creationDate, long setupTime, long globalSequenceTime, float difficultyAverage) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -75,19 +75,19 @@ public class Training implements Parcelable {
         return creationDate;
     }
 
-    public int getSetupTime() {
+    public long getSetupTime() {
         return setupTime;
     }
 
-    public void setSetupTime(int setupTime) {
+    public void setSetupTime(long setupTime) {
         this.setupTime = setupTime;
     }
 
-    public int getGlobalSequenceTime() {
+    public long getGlobalSequenceTime() {
         return globalSequenceTime;
     }
 
-    public void setGlobalSequenceTime(int globalSequenceTime) {
+    public void setGlobalSequenceTime(long globalSequenceTime) {
         this.globalSequenceTime = globalSequenceTime;
     }
 
@@ -101,13 +101,13 @@ public class Training implements Parcelable {
 
     @Override
     public String toString() {
-        return "Training{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", creationDate=" + creationDate +
-                ", setupTime=" + setupTime +
-                ", globalSequenceTime=" + globalSequenceTime +
+        return "Training{" + "\n\t" +
+                "id=" + id + "\n\t" +
+                ", name='" + name + '\'' + "\n\t" +
+                ", description='" + description + '\'' + "\n\t" +
+                ", creationDate=" + creationDate + "\n\t" +
+                ", setupTime=" + setupTime + "\n\t" +
+                ", globalSequenceTime=" + globalSequenceTime + "\n" +
                 '}';
     }
 
@@ -117,8 +117,8 @@ public class Training implements Parcelable {
         id = in.readInt();
         name = in.readString();
         description = in.readString();
-        setupTime = in.readInt();
-        globalSequenceTime = in.readInt();
+        setupTime = in.readLong();
+        globalSequenceTime = in.readLong();
         difficultyAverage = in.readFloat();
     }
 
@@ -144,8 +144,8 @@ public class Training implements Parcelable {
         dest.writeInt(id);
         dest.writeString(name);
         dest.writeString(description);
-        dest.writeInt(setupTime);
-        dest.writeInt(globalSequenceTime);
+        dest.writeLong(setupTime);
+        dest.writeLong(globalSequenceTime);
         dest.writeFloat(difficultyAverage);
     }
 }

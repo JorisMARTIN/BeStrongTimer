@@ -1,5 +1,6 @@
 package com.iut2.bestrongtimer.utils;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
@@ -16,11 +17,13 @@ import android.widget.Button;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import com.iut2.bestrongtimer.LiveTraining.LiveTrainingActivity;
 import com.iut2.bestrongtimer.R;
 import com.iut2.bestrongtimer.db.Entity.Training.Training;
 
 public class LaunchEditDialog extends DialogFragment implements View.OnClickListener {
 
+    private static final String TRAINING = "training";
     // BUTTONS
     Button launchTrainingButton, editTrainingButton;
 
@@ -82,9 +85,13 @@ public class LaunchEditDialog extends DialogFragment implements View.OnClickList
     @Override
     public void onClick(View v) {
 
+        dismiss();
+
         // Launch training
         if (v == launchTrainingButton) {
-
+            Intent intent = new Intent(getContext(), LiveTrainingActivity.class);
+            intent.putExtra(TRAINING, training);
+            startActivity(intent);
         // Edit training
         } else {
 

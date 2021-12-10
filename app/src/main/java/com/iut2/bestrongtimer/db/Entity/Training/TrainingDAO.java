@@ -35,4 +35,8 @@ public interface TrainingDAO {
     @Transaction
     @Query("SELECT * FROM training")
     List<TrainingSequence> getSequences();
+
+    @Transaction
+    @Query("SELECT * FROM training WHERE id = (:id)")
+    TrainingSequence getSequencesFromTrainingId(int id);
 }

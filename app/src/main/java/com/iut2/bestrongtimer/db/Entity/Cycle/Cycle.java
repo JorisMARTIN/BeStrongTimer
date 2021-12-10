@@ -13,6 +13,9 @@ public class Cycle {
     @ColumnInfo(name = "sequence_id")
     private int sequenceId;
 
+    @ColumnInfo(name = "pos")
+    private int pos;
+
     @ColumnInfo(name = "name")
     private String name;
 
@@ -20,10 +23,10 @@ public class Cycle {
     private int repetition;
 
     @ColumnInfo(name = "activity_time")
-    private int activityTime;
+    private long activityTime;
 
     @ColumnInfo(name = "recovery_time")
-    private int recoveryTime;
+    private long recoveryTime;
 
     public int getId() {
         return id;
@@ -39,6 +42,14 @@ public class Cycle {
 
     public void setSequenceId(int sequenceId) {
         this.sequenceId = sequenceId;
+    }
+
+    public int getPos() {
+        return pos;
+    }
+
+    public void setPos(int pos) {
+        this.pos = pos;
     }
 
     public String getName() {
@@ -57,19 +68,32 @@ public class Cycle {
         this.repetition = repetition;
     }
 
-    public int getActivityTime() {
+    public long getActivityTime() {
         return activityTime;
     }
 
-    public void setActivityTime(int activityTime) {
+    public void setActivityTime(long activityTime) {
         this.activityTime = activityTime;
     }
 
-    public int getRecoveryTime() {
+    public long getRecoveryTime() {
         return recoveryTime;
     }
 
-    public void setRecoveryTime(int recoveryTime) {
+    public void setRecoveryTime(long recoveryTime) {
         this.recoveryTime = recoveryTime;
+    }
+
+    @Override
+    public String toString() {
+        return "Cycle{" + "\n\t" +
+                "id=" + id + "\n\t" +
+                ", sequenceId=" + sequenceId + "\n\t" +
+                ", pos=" + pos + "\n\t" +
+                ", name='" + name + '\'' + "\n\t" +
+                ", repetition=" + repetition + "\n\t" +
+                ", activityTime=" + activityTime + "\n\t" +
+                ", recoveryTime=" + recoveryTime + "\n" +
+                '}';
     }
 }
