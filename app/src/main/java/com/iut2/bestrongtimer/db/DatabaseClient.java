@@ -18,7 +18,8 @@ public class DatabaseClient {
 
         //creating the app database with Room database builder
         //MyToDos is the name of the database
-        appDatabase = Room.databaseBuilder(context, AppDatabase.class, "BeStrongTimer").build();
+        appDatabase = Room.databaseBuilder(context, AppDatabase.class, "BeStrongTimer")
+                .build();
 
         ////////// REMPLIR LA BD à la première création à l'aide de l'objet roomDatabaseCallback
         // Ajout de la méthode addCallback permettant de populate (remplir) la base de données à sa création
@@ -47,17 +48,24 @@ public class DatabaseClient {
             db.execSQL("INSERT INTO training (name, description, setup_time, global_sequence_time, difficulty_average) VALUES(\"Test\", \"Test description\", 5000, 820000, 3.0);");
 
             // Sequence 1
-            db.execSQL("INSERT INTO sequence (training_id, pos, name, description, difficulty, repetition, recovery_time, global_cycle_time) VALUES (1, 1, \"Test sequence 1\", \"Test Description sequence 1\", 2, 2, 7000, 150000);");
+            db.execSQL("INSERT INTO sequence (training_id, pos, name, description, difficulty, repetition, recovery_time, global_cycle_time) VALUES (1, 1, \"Test sequence 1\", \"Test Description sequence 1\", 2, 1, 7000, 150000);");
                 // Cycles
-                db.execSQL("INSERT INTO cycle (sequence_id, pos, name, repetition, activity_time, recovery_time) VALUES (1, 1, \"Pompes x 5\", 5, 5000, 3000);");
-                db.execSQL("INSERT INTO cycle (sequence_id, pos, name, repetition, activity_time, recovery_time) VALUES (1, 2, \"Abdos x 5\", 5, 5000, 3000);");
-
-            // Sequence 2
-            db.execSQL("INSERT INTO sequence (training_id, pos, name, description, difficulty, repetition, recovery_time, global_cycle_time) VALUES (1, 2, \"Test sequence 2\", \"Test Description sequence 2\", 4, 1, 5000, 75000);");
-                // Cycles
-                db.execSQL("INSERT INTO cycle (sequence_id, pos, name, repetition, activity_time, recovery_time) VALUES (2, 1, \"Pompes x 5\", 5, 10000, 5000);");
+                db.execSQL("INSERT INTO cycle (sequence_id, pos, name, repetition, activity_time, recovery_time) VALUES (1, 1, \"Pompes x 5\", 2, 5000, 3000);");
 
 
+            // Trigger to delete linked sequences and list to training
+            db.execSQL(
+                    "CREATE TRIGGER delete_cycles BEFORE DELETE on sequence " +
+                    "BEGIN " +
+                    "DELETE FROM cycle WHERE old.id = sequence_id;" +
+                    "END;");
+
+            db.execSQL(
+                    "CREATE TRIGGER delete_sequences BEFORE DELETE on training " +
+                    "BEGIN " +
+                    "DELETE FROM sequence WHERE old.id = training_id;" +
+                    "END;"
+            );
         }
     };
 

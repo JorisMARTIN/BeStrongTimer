@@ -24,7 +24,7 @@ public interface SequenceDAO {
     Sequence getSequenceById(int id);
 
     @Insert
-    void insert(Sequence sequence);
+    long insert(Sequence sequence);
 
     @Delete
     void delete(Sequence sequence);
@@ -42,6 +42,6 @@ public interface SequenceDAO {
 
     @Transaction
     @Query("SELECT * FROM sequence WHERE training_id = (:trainingId) ORDER BY pos")
-    List<SequenceCycle> getSequencesCycleFromTrainingId(int trainingId);
+    List<SequenceCycle> getSequencesCycleFromTrainingId(long trainingId);
 
 }

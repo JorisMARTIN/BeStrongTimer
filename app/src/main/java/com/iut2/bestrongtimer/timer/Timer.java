@@ -1,6 +1,11 @@
 package com.iut2.bestrongtimer.timer;
 
+import android.media.AudioManager;
+import android.media.ToneGenerator;
+import android.os.Build;
 import android.os.CountDownTimer;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 
 public class Timer {
 
@@ -8,11 +13,13 @@ public class Timer {
 
     private long initialTime, currentTime;
     private CountDownTimer timer;
+    private Vibrator v;
 
-    public Timer(UpdateListener listener, long initTime) {
+    public Timer(UpdateListener listener, long initTime, Vibrator v) {
         this.listener = listener;
         this.initialTime = initTime;
         this.currentTime = initTime;
+        this.v = v;
     }
 
     public void start() {
@@ -81,6 +88,19 @@ public class Timer {
         listener.onUpdate(this.getMinutes(), this.getSecondes());
     }
     private void finish() {
+        
+        // Play sound
+        ToneGenerator toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, 100);
+        toneGen1.startTone(ToneGenerator.TONE_CDMA_PIP,150);
+
+        // Vibrate for 500 milliseconds
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            v.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
+        } else {
+            //deprecated in API 26
+            v.vibrate(500);
+        }
+
         listener.onFinish();
     }
 }

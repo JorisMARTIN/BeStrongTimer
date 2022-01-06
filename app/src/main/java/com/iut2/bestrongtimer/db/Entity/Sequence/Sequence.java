@@ -1,17 +1,20 @@
 package com.iut2.bestrongtimer.db.Entity.Sequence;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity
-public class Sequence {
+public class Sequence implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private long id;
 
     @ColumnInfo(name = "training_id")
-    private int trainingId;
+    private long trainingId;
 
     @ColumnInfo(name = "pos")
     private int pos;
@@ -34,19 +37,54 @@ public class Sequence {
     @ColumnInfo(name = "global_cycle_time")
     private long globalCycleTime;
 
-    public int getId() {
+    public Sequence(long trainingId, int pos, String name, String description, int difficulty, int repetition, long recoveryTime, long globalCycleTime) {
+        this.trainingId = trainingId;
+        this.pos = pos;
+        this.name = name;
+        this.description = description;
+        this.difficulty = difficulty;
+        this.repetition = repetition;
+        this.recoveryTime = recoveryTime;
+        this.globalCycleTime = globalCycleTime;
+    }
+
+    protected Sequence(Parcel in) {
+        id = in.readLong();
+        trainingId = in.readLong();
+        pos = in.readInt();
+        name = in.readString();
+        description = in.readString();
+        difficulty = in.readInt();
+        repetition = in.readInt();
+        recoveryTime = in.readLong();
+        globalCycleTime = in.readLong();
+    }
+
+    public static final Creator<Sequence> CREATOR = new Creator<Sequence>() {
+        @Override
+        public Sequence createFromParcel(Parcel in) {
+            return new Sequence(in);
+        }
+
+        @Override
+        public Sequence[] newArray(int size) {
+            return new Sequence[size];
+        }
+    };
+
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public int getTrainingId() {
+    public long getTrainingId() {
         return trainingId;
     }
 
-    public void setTrainingId(int trainingId) {
+    public void setTrainingId(long trainingId) {
         this.trainingId = trainingId;
     }
 
@@ -119,5 +157,23 @@ public class Sequence {
                 ", recoveryTime=" + recoveryTime + "\n\t" +
                 ", globalCycleTime=" + globalCycleTime + "\n" +
                 '}';
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeLong(trainingId);
+        dest.writeInt(pos);
+        dest.writeString(name);
+        dest.writeString(description);
+        dest.writeInt(difficulty);
+        dest.writeInt(repetition);
+        dest.writeLong(recoveryTime);
+        dest.writeLong(globalCycleTime);
     }
 }

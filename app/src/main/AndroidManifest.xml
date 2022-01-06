@@ -10,6 +10,24 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
         <activity
+            android:name=".AddEditTraining.AddEditCycle"
+            android:exported="false" />
+        <activity
+            android:name=".AddEditTraining.SequenceCycles"
+            android:exported="false" />
+        <activity
+            android:name=".AddEditTraining.TrainingSequences"
+            android:exported="false" />
+        <activity
+            android:name=".AddEditTraining.AddEditSequence"
+            android:exported="false" />
+        <activity
+            android:name=".AddEditTraining.AddEditTraining"
+            android:exported="false" />
+        <activity
+            android:name=".LiveTraining.LiveTrainingEndActivity"
+            android:exported="false" />
+        <activity
             android:name=".LiveTraining.LiveTrainingActivity"
             android:exported="false" />
         <activity
@@ -22,5 +40,6 @@
             </intent-filter>
         </activity>
     </application>
+    <uses-permission android:name="android.permission.VIBRATE"/>
 
 </manifest>

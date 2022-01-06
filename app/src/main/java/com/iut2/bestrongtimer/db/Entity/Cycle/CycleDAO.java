@@ -21,7 +21,7 @@ public interface CycleDAO {
     Cycle getSequenceById(int id);
 
     @Insert
-    void insert(Cycle cycle);
+    long insert(Cycle cycle);
 
     @Delete
     void delete(Cycle cycle);

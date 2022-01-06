@@ -72,7 +72,7 @@
                 <TextView
                     android:id="@+id/activity_live_current_sequence_desc"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="50sp"
                     android:layout_margin="5sp"
                     android:text="Desc ..."
                     android:textColor="@color/darkGray"
@@ -143,13 +143,15 @@
 
                 <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="50sp"
+                    android:layout_margin="5sp"
                     android:layout_gravity="center"
                     android:orientation="horizontal">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:layout_margin="5sp"
                         android:orientation="horizontal">
 
@@ -175,6 +177,7 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:layout_margin="5sp"
                         android:orientation="horizontal">
 

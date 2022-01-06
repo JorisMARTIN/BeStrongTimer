@@ -20,4 +20,7 @@ public interface LiveTrainingListener {
     void onSequenceRecovery();
 
     void onActivity();
+
+    void onTimerPause();
+    void onTimerRestart();
 }

@@ -1,5 +1,9 @@
 package com.iut2.bestrongtimer.LiveTraining;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.os.Vibrator;
+
 import com.iut2.bestrongtimer.db.Entity.Cycle.Cycle;
 import com.iut2.bestrongtimer.db.Entity.Sequence.Sequence;
 import com.iut2.bestrongtimer.db.Entity.SequenceCycle;
@@ -8,7 +12,7 @@ import com.iut2.bestrongtimer.timer.UpdateListener;
 
 import java.util.List;
 
-public class LiveTraining {
+public class LiveTraining implements Parcelable {
 
     private Timer timer;
     private List<SequenceCycle> sequenceCycles;
@@ -18,13 +22,15 @@ public class LiveTraining {
     private int currentSequenceRepetitionLeft, currentCycleRepetitionLeft;
     private LiveTrainingListener listener;
     private LiveTrainingState state;
+    private boolean isPaused;
+    private Vibrator v;
 
-    public LiveTraining(List<SequenceCycle> sequenceCycle, LiveTrainingListener listener) {
+    public LiveTraining(List<SequenceCycle> sequenceCycle, LiveTrainingListener listener, Vibrator v) {
 
         this.currentSequence = sequenceCycle.get(0).sequence;
         this.currentCycle = sequenceCycle.get(0).getSortedCycles().get(0);
 
-        this.currentSequenceRepetitionLeft = this.currentSequence.getRepetition();
+        this.currentSequenceRepetitionLeft = this.currentSequence.getRepetition() - 1;
         this.currentCycleRepetitionLeft = this.currentCycle.getRepetition();
 
         this.sequenceCycles = sequenceCycle;
@@ -33,18 +39,93 @@ public class LiveTraining {
         this.listener.onSequenceChange(this.currentSequence, this.sequenceCycles.size());
         this.listener.onCycleChange(this.currentCycle, this.sequenceCycles.get(this.currentSequence.getPos() - 1).getSortedCycles().size());
 
+        this.isPaused = false;
+
+        this.v = v;
     }
 
-    public void startTraining() {
-        this.state = LiveTrainingState.ACTIVITY;
-        this.listener.onActivity();
-        startTimer(this.currentCycle.getActivityTime());
+    public boolean isPaused() {
+        return isPaused;
+    }
+
+    public int getMinutesLeft() {
+        return this.timer.getMinutes();
+    }
+
+    public int getSecondsLeft() {
+        return this.timer.getSecondes();
+    }
+
+    public void setListener(LiveTrainingListener listener) {
+        this.listener = listener;
+    }
+
+    public List<SequenceCycle> getSequenceCycles() {
+        return sequenceCycles;
+    }
+
+    public Sequence getCurrentSequence() {
+        return currentSequence;
+    }
+
+    public Cycle getCurrentCycle() {
+        return currentCycle;
+    }
+
+    public int getCurrentSequenceRepetitionLeft() {
+        return currentSequenceRepetitionLeft;
+    }
+
+    public int getCurrentCycleRepetitionLeft() {
+        return currentCycleRepetitionLeft;
+    }
+
+    public LiveTrainingState getState() {
+        return state;
+    }
+
+    protected LiveTraining(Parcel in) {
+        currentSequence = in.readParcelable(Sequence.class.getClassLoader());
+        currentCycle = in.readParcelable(Cycle.class.getClassLoader());
+        currentSequenceRepetitionLeft = in.readInt();
+        currentCycleRepetitionLeft = in.readInt();
+        isPaused = in.readByte() != 0;
+    }
+
+    public static final Creator<LiveTraining> CREATOR = new Creator<LiveTraining>() {
+        @Override
+        public LiveTraining createFromParcel(Parcel in) {
+            return new LiveTraining(in);
+        }
+
+        @Override
+        public LiveTraining[] newArray(int size) {
+            return new LiveTraining[size];
+        }
+    };
+
+    public void startTraining(long preparationTime) {
+        this.state = LiveTrainingState.SETUP;
+
+        timer = new Timer(new UpdateListener() {
+            @Override
+            public void onUpdate(int minuteLeft, int secondsLeft) {
+                listener.onTimeChange(minuteLeft, secondsLeft);
+            }
+
+            @Override
+            public void onFinish() {
+                listener.onActivity();
+                state = LiveTrainingState.ACTIVITY;
+                startTimer(currentCycle.getActivityTime());
+            }
+        }, preparationTime, v);
+        timer.start();
+
     }
 
     /**
      * Called a the end of each timer
-     *
-     *
      */
     public void updateState() {
 
@@ -77,7 +158,7 @@ public class LiveTraining {
             // Then launch next cycle
             this.state = LiveTrainingState.ACTIVITY;
             // Switch to next next cycle ( pos start from 1 to ... and not from 0 to ..., then .get(elem.getPos()) == .get(xx.indexOf(elem) + 1))
-            this.currentCycle = this.sequenceCycles.get(this.currentSequence.getPos()).getSortedCycles().get(this.currentCycle.getPos());
+            this.currentCycle = this.sequenceCycles.get(this.currentSequence.getPos() - 1).getSortedCycles().get(this.currentCycle.getPos());
             // Reset repetition left
             this.currentCycleRepetitionLeft = this.currentCycle.getRepetition();
 
@@ -141,7 +222,7 @@ public class LiveTraining {
 
     }
 
-    public void startTimer(long timerTime) {
+    private void startTimer(long timerTime) {
         timer = new Timer(new UpdateListener() {
             @Override
             public void onUpdate(int minuteLeft, int secondsLeft) {
@@ -150,11 +231,37 @@ public class LiveTraining {
 
             @Override
             public void onFinish() {
+                timer.reset();
                 updateState();
             }
-        }, timerTime);
+        }, timerTime, v);
 
         timer.start();
     }
 
+    public void pauseRestart() {
+        if (this.isPaused) {
+            this.timer.start();
+            this.listener.onTimerRestart();
+        } else {
+            this.timer.pause();
+            this.listener.onTimerPause();
+        }
+
+        this.isPaused = !this.isPaused;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(currentSequence, flags);
+        dest.writeParcelable(currentCycle, flags);
+        dest.writeInt(currentSequenceRepetitionLeft);
+        dest.writeInt(currentCycleRepetitionLeft);
+        dest.writeByte((byte) (isPaused ? 1 : 0));
+    }
 }

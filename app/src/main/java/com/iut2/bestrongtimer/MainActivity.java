@@ -3,22 +3,24 @@ package com.iut2.bestrongtimer;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.iut2.bestrongtimer.AddEditTraining.AddEditTraining;
 import com.iut2.bestrongtimer.db.DatabaseClient;
 import com.iut2.bestrongtimer.db.Entity.Training.Training;
 import com.iut2.bestrongtimer.utils.LaunchEditDialog;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
-
-    private static final String SELECTED_TRAINING = "selected_training";
 
     FragmentManager fm;
     LaunchEditDialog dialog;
@@ -30,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     // VIEW
     LinearLayout trainingsContainer;
     TextView anyTrainingAvailable;
+    FloatingActionButton addTrainingButton;
 
 
     @Override
@@ -41,17 +44,22 @@ public class MainActivity extends AppCompatActivity {
 
         trainingsContainer = findViewById(R.id.training_layout_container);
         anyTrainingAvailable = findViewById(R.id.any_trainings_available_text);
+        addTrainingButton = findViewById(R.id.training_add_button);
+
+        addTrainingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), AddEditTraining.class);
+                startActivity(intent);
+            }
+        });
 
         db = DatabaseClient.getInstance(getApplicationContext());
-
-        getTrainings();
     }
 
     @Override
     protected void onResume() {
-
-
-
+        getTrainings();
         super.onResume();
     }
 
@@ -62,6 +70,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getTrainings() {
+
+        trainingsContainer.removeAllViews();
 
         class CollectTrainings extends AsyncTask<Void, Void, List<Training>> {
 
@@ -79,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
                 if (trainings.size() > 0) {
                     anyTrainingAvailable.setVisibility(View.INVISIBLE);
                 }
-                allTrainings = trainings;
+                allTrainings = new ArrayList<>(trainings);
                 // Open dialog if activity was restarted
                 initView();
             }
@@ -92,7 +102,6 @@ public class MainActivity extends AppCompatActivity {
     private void initView() {
 
         for (Training training : allTrainings) {
-            System.out.println(training.toString());
 
             LinearLayout layout = (LinearLayout) getLayoutInflater().inflate(R.layout.component_training, null);
 

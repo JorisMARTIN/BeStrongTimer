@@ -1,17 +1,20 @@
 package com.iut2.bestrongtimer.db.Entity.Cycle;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity
-public class Cycle {
+public class Cycle implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private long id;
 
     @ColumnInfo(name = "sequence_id")
-    private int sequenceId;
+    private long sequenceId;
 
     @ColumnInfo(name = "pos")
     private int pos;
@@ -28,19 +31,50 @@ public class Cycle {
     @ColumnInfo(name = "recovery_time")
     private long recoveryTime;
 
-    public int getId() {
+    public Cycle(long sequenceId, int pos, String name, int repetition, long activityTime, long recoveryTime) {
+        this.sequenceId = sequenceId;
+        this.pos = pos;
+        this.name = name;
+        this.repetition = repetition;
+        this.activityTime = activityTime;
+        this.recoveryTime = recoveryTime;
+    }
+
+    protected Cycle(Parcel in) {
+        id = in.readLong();
+        sequenceId = in.readLong();
+        pos = in.readInt();
+        name = in.readString();
+        repetition = in.readInt();
+        activityTime = in.readLong();
+        recoveryTime = in.readLong();
+    }
+
+    public static final Creator<Cycle> CREATOR = new Creator<Cycle>() {
+        @Override
+        public Cycle createFromParcel(Parcel in) {
+            return new Cycle(in);
+        }
+
+        @Override
+        public Cycle[] newArray(int size) {
+            return new Cycle[size];
+        }
+    };
+
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public int getSequenceId() {
+    public long getSequenceId() {
         return sequenceId;
     }
 
-    public void setSequenceId(int sequenceId) {
+    public void setSequenceId(long sequenceId) {
         this.sequenceId = sequenceId;
     }
 
@@ -95,5 +129,21 @@ public class Cycle {
                 ", activityTime=" + activityTime + "\n\t" +
                 ", recoveryTime=" + recoveryTime + "\n" +
                 '}';
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeLong(sequenceId);
+        dest.writeInt(pos);
+        dest.writeString(name);
+        dest.writeInt(repetition);
+        dest.writeLong(activityTime);
+        dest.writeLong(recoveryTime);
     }
 }

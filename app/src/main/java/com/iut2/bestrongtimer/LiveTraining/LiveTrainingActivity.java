@@ -1,32 +1,36 @@
 package com.iut2.bestrongtimer.LiveTraining;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.iut2.bestrongtimer.LiveTraining.LiveTraining;
-import com.iut2.bestrongtimer.LiveTraining.LiveTrainingListener;
 import com.iut2.bestrongtimer.R;
 import com.iut2.bestrongtimer.db.DatabaseClient;
 import com.iut2.bestrongtimer.db.Entity.Cycle.Cycle;
 import com.iut2.bestrongtimer.db.Entity.Sequence.Sequence;
 import com.iut2.bestrongtimer.db.Entity.SequenceCycle;
 import com.iut2.bestrongtimer.db.Entity.Training.Training;
-import com.iut2.bestrongtimer.timer.Timer;
-import com.iut2.bestrongtimer.timer.UpdateListener;
 
 import java.util.List;
 
 public class LiveTrainingActivity extends AppCompatActivity implements LiveTrainingListener {
 
-    private static final String TRAINING = "training";
+    public static final String TRAINING = "training";
+    private static final String TRAINING_STATE = "training_state";
 
     // DATABASE
     DatabaseClient db;
@@ -64,6 +68,10 @@ public class LiveTrainingActivity extends AppCompatActivity implements LiveTrain
     // Model
     LiveTraining liveTraining;
 
+    // Display data on pause
+    String mainLabel;
+    Drawable mainLabelIcon;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,10 +108,16 @@ public class LiveTrainingActivity extends AppCompatActivity implements LiveTrain
         trainingTitle.setText(training.getName());
 
         // Get Sequence & cycle associated to the training
-        getSequences();
+        getSequences(savedInstanceState);
     }
 
-    private void getSequences() {
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle savedInstanceState) {
+        savedInstanceState.putParcelable(TRAINING_STATE, liveTraining);
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    private void getSequences(Bundle savedInstanceState) {
 
         class CollectSequencesCycles extends AsyncTask<Void, Void, List<SequenceCycle>> {
 
@@ -118,7 +132,7 @@ public class LiveTrainingActivity extends AppCompatActivity implements LiveTrain
                 super.onPostExecute(trainingSequencesCycles);
                 sequencesCycles = trainingSequencesCycles;
 
-                initTraining();
+                initTraining(savedInstanceState);
             }
         }
 
@@ -126,32 +140,49 @@ public class LiveTrainingActivity extends AppCompatActivity implements LiveTrain
         c.execute();
     }
 
-    private void initTraining() {
+    private void initTraining(Bundle savedInstanceState) {
 
-        liveTraining = new LiveTraining(this.sequencesCycles, this);
+        if (savedInstanceState != null) {
+            this.liveTraining = savedInstanceState.getParcelable(TRAINING_STATE);
+
+            if (this.liveTraining.getState() == LiveTrainingState.ACTIVITY) {
+                onActivity();
+            } else if (this.liveTraining.getState() == LiveTrainingState.RECOVERY) {
+                onCycleRecovery();
+            } else if (this.liveTraining.getState() == LiveTrainingState.SEQUENCE_RECOVERY){
+                onSequenceRecovery();
+            } else {
+                this.stateLabel.setText("Préparation...");
+            }
+
+            onSequenceChange(this.liveTraining.getCurrentSequence(), this.liveTraining.getSequenceCycles().size());
+            onCycleChange(this.liveTraining.getCurrentCycle(), this.liveTraining.getSequenceCycles().get(this.liveTraining.getCurrentSequence().getPos() - 1).getSortedCycles().size());
+
+            onSequenceRestart(this.liveTraining.getCurrentSequenceRepetitionLeft());
+            onCycleRestart(this.liveTraining.getCurrentCycleRepetitionLeft());
+
+            this.liveTraining.setListener(this);
+
+            if (this.liveTraining.isPaused()) {
+                onTimerPause();
+                onTimeChange(this.liveTraining.getMinutesLeft(), this.liveTraining.getSecondsLeft());
+            }
+
+        } else {
+            Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+
+            this.liveTraining = new LiveTraining(this.sequencesCycles, this, v);
+            this.stateLabel.setText("Préparation...");
+            this.liveTraining.startTraining(this.training.getSetupTime());
+        }
 
         pauseResumeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO pause restart
+                liveTraining.pauseRestart();
             }
         });
 
-        this.stateLabel.setText("Préparation...");
-
-       Timer timer = new Timer(new UpdateListener() {
-            @Override
-            public void onUpdate(int minutesLeft, int secondsLeft) {
-               //LiveTrainingActivity.this.onTimeChange(minutesLeft, secondsLeft);
-               onTimeChange(minutesLeft, secondsLeft);
-            }
-
-            @Override
-            public void onFinish() {
-                liveTraining.startTraining();
-            }
-        }, 10000);
-       timer.start();
     }
 
     // Live training listeners
@@ -199,7 +230,10 @@ public class LiveTrainingActivity extends AppCompatActivity implements LiveTrain
 
     @Override
     public void onTrainingEnd() {
-
+        Intent intent = new Intent(this, LiveTrainingEndActivity.class);
+        intent.putExtra(LiveTrainingEndActivity.TRAINING, training);
+        startActivity(intent);
+        finish();
     }
 
     @Override
@@ -212,7 +246,7 @@ public class LiveTrainingActivity extends AppCompatActivity implements LiveTrain
     @Override
     public void onSequenceRecovery() {
         this.stateLabel.setText("Tu as le droit de souffler un peu plus");
-        this.layout.setBackgroundColor(ContextCompat.getColor(this, R.color.lightGreen));
+        this.layout.setBackgroundColor(ContextCompat.getColor(this, R.color.lightBlue));
         this.stateIcon.setBackgroundResource(R.drawable.ic_sleep);
     }
 
@@ -221,5 +255,20 @@ public class LiveTrainingActivity extends AppCompatActivity implements LiveTrain
         this.stateLabel.setText("GO !");
         this.layout.setBackgroundColor(ContextCompat.getColor(this, R.color.lightRed));
         this.stateIcon.setBackgroundResource(R.drawable.ic_activity);
+    }
+
+    @Override
+    public void onTimerPause() {
+        this.mainLabel = (String) this.stateLabel.getText();
+        this.mainLabelIcon = this.stateIcon.getBackground();
+
+        this.stateLabel.setText("PAUSE");
+        this.stateIcon.setBackgroundResource(R.drawable.ic_pause);
+    }
+
+    @Override
+    public void onTimerRestart() {
+        this.stateLabel.setText(this.mainLabel);
+        this.stateIcon.setBackground(this.mainLabelIcon);
     }
 }

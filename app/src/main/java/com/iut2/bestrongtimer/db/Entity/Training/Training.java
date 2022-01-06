@@ -16,7 +16,7 @@ import java.util.Date;
 public class Training implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private long id;
 
     @ColumnInfo(name = "name")
     private String name;
@@ -37,21 +37,56 @@ public class Training implements Parcelable {
     @ColumnInfo(name = "difficulty_average")
     private float difficultyAverage;
 
-    Training(int id, String name, String description, Date creationDate, long setupTime, long globalSequenceTime, float difficultyAverage) {
-        this.id = id;
+    public Training(String name, String description, long setupTime, long globalSequenceTime, float difficultyAverage) {
         this.name = name;
+        this.creationDate = new Date();
         this.description = description;
-        this.creationDate = creationDate;
         this.setupTime = setupTime;
         this.globalSequenceTime = globalSequenceTime;
         this.difficultyAverage = difficultyAverage;
     }
 
-    public int getId() {
+    protected Training(Parcel in) {
+        id = in.readLong();
+        name = in.readString();
+        description = in.readString();
+        setupTime = in.readLong();
+        globalSequenceTime = in.readLong();
+        difficultyAverage = in.readFloat();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(name);
+        dest.writeString(description);
+        dest.writeLong(setupTime);
+        dest.writeLong(globalSequenceTime);
+        dest.writeFloat(difficultyAverage);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<Training> CREATOR = new Creator<Training>() {
+        @Override
+        public Training createFromParcel(Parcel in) {
+            return new Training(in);
+        }
+
+        @Override
+        public Training[] newArray(int size) {
+            return new Training[size];
+        }
+    };
+
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -109,43 +144,5 @@ public class Training implements Parcelable {
                 ", setupTime=" + setupTime + "\n\t" +
                 ", globalSequenceTime=" + globalSequenceTime + "\n" +
                 '}';
-    }
-
-    /* Parcelable implementation */
-
-    protected Training(Parcel in) {
-        id = in.readInt();
-        name = in.readString();
-        description = in.readString();
-        setupTime = in.readLong();
-        globalSequenceTime = in.readLong();
-        difficultyAverage = in.readFloat();
-    }
-
-    public static final Creator<Training> CREATOR = new Creator<Training>() {
-        @Override
-        public Training createFromParcel(Parcel in) {
-            return new Training(in);
-        }
-
-        @Override
-        public Training[] newArray(int size) {
-            return new Training[size];
-        }
-    };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
-        dest.writeString(name);
-        dest.writeString(description);
-        dest.writeLong(setupTime);
-        dest.writeLong(globalSequenceTime);
-        dest.writeFloat(difficultyAverage);
     }
 }

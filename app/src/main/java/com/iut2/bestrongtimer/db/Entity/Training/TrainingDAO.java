@@ -21,10 +21,10 @@ public interface TrainingDAO {
     int count();
 
     @Query("SELECT * FROM training WHERE id = (:id) LIMIT 1")
-    Training getTrainingById(int id);
+    Training getTrainingById(long id);
 
     @Insert
-    void insert(Training training);
+    long insert(Training training);
 
     @Delete
     void delete(Training training);

@@ -29,6 +29,25 @@
 
     <string name="training_add_button_desc">Ajouter un entrainement</string>
     <string name="any_training_available">Aucun entraînement disponibles. Créer votre premier entraînement !</string>
+    <string name="training_end">Entrainement terminé</string>
+    <string name="training_rating_difficulty">Notez la difficultée de cet entrainement</string>
+    <string name="restart_training">Recommencer l\'entrainement</string>
+    <string name="back_to_menu">Retour au menu</string>
+    <string name="add_training">Ajout d\'un entrainement</string>
+    <string name="edit_training">Éditer un entrainement</string>
+    <string name="setup_time">Temps de préparation</string>
+    <string name="title_activity_add_edit_sequence">AddEditSequence</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
 
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="cycles">Cycles</string>
+    <string name="edit_sequence">Edition d\'une séquence</string>
+    <string name="edit_cycle">Edition d\'un cycle</string>
+    <string name="delete">Supprimer</string>
 
 </resources>

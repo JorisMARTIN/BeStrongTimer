@@ -17,13 +17,15 @@ import android.widget.Button;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import com.iut2.bestrongtimer.AddEditTraining.AddEditSequence;
+import com.iut2.bestrongtimer.AddEditTraining.AddEditTraining;
 import com.iut2.bestrongtimer.LiveTraining.LiveTrainingActivity;
+import com.iut2.bestrongtimer.LiveTraining.LiveTrainingEndActivity;
 import com.iut2.bestrongtimer.R;
 import com.iut2.bestrongtimer.db.Entity.Training.Training;
 
 public class LaunchEditDialog extends DialogFragment implements View.OnClickListener {
 
-    private static final String TRAINING = "training";
     // BUTTONS
     Button launchTrainingButton, editTrainingButton;
 
@@ -90,11 +92,13 @@ public class LaunchEditDialog extends DialogFragment implements View.OnClickList
         // Launch training
         if (v == launchTrainingButton) {
             Intent intent = new Intent(getContext(), LiveTrainingActivity.class);
-            intent.putExtra(TRAINING, training);
+            intent.putExtra(LiveTrainingActivity.TRAINING, training);
             startActivity(intent);
         // Edit training
         } else {
-
+            Intent intent = new Intent(getContext(), AddEditTraining.class);
+            intent.putExtra(AddEditTraining.TRAINING_ID, training.getId());
+            startActivity(intent);
         }
     }
 }

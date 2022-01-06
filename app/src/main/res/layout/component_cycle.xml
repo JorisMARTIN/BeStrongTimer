@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/component_sequence"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:baselineAligned="false"
+    android:orientation="horizontal"
+    android:background="@drawable/border"
+    android:padding="3sp">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.8"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/component_cycle_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TITRE"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <androidx.gridlayout.widget.GridLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="0.2"
+        app:columnCount="4"
+        app:rowCount="2">
+
+        <ImageView
+            android:layout_width="20sp"
+            android:layout_height="20sp"
+            android:layout_marginLeft="2.5sp"
+            android:layout_marginRight="2.5sp"
+            android:contentDescription="cycle timer icon"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_activity"
+            app:layout_column="0"
+            app:layout_row="0" />
+
+
+        <TextView
+            android:id="@+id/component_cycle_activity_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="xx min"
+            android:textColor="@color/black"
+            app:layout_column="1"
+            app:layout_row="0" />
+
+        <ImageView
+            android:layout_width="20sp"
+            android:layout_height="20sp"
+            android:layout_marginLeft="2.5sp"
+            android:layout_marginRight="2.5sp"
+            android:contentDescription="cycle timer icon"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_sleep"
+            app:layout_column="2"
+            app:layout_row="0" />
+
+
+        <TextView
+            android:id="@+id/component_cycle_recovery_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="xx min"
+            android:textColor="@color/black"
+            app:layout_column="3"
+            app:layout_row="0" />
+
+        <ImageView
+            android:layout_width="20sp"
+            android:layout_height="20sp"
+            android:contentDescription="cycle level icon"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_loop"
+            app:layout_column="1"
+            app:layout_row="1" />
+
+        <TextView
+            android:id="@+id/component_cycle_repetition"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity=""
+            android:text="x XX"
+            android:textColor="@color/black"
+            app:layout_column="2"
+            app:layout_row="1" />
+
+    </androidx.gridlayout.widget.GridLayout>
+
+</LinearLayout>
