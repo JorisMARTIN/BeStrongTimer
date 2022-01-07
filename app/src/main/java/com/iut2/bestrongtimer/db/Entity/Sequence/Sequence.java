@@ -34,10 +34,7 @@ public class Sequence implements Parcelable {
     @ColumnInfo(name = "recovery_time")
     private long recoveryTime;
 
-    @ColumnInfo(name = "global_cycle_time")
-    private long globalCycleTime;
-
-    public Sequence(long trainingId, int pos, String name, String description, int difficulty, int repetition, long recoveryTime, long globalCycleTime) {
+    public Sequence(long trainingId, int pos, String name, String description, int difficulty, int repetition, long recoveryTime) {
         this.trainingId = trainingId;
         this.pos = pos;
         this.name = name;
@@ -45,7 +42,6 @@ public class Sequence implements Parcelable {
         this.difficulty = difficulty;
         this.repetition = repetition;
         this.recoveryTime = recoveryTime;
-        this.globalCycleTime = globalCycleTime;
     }
 
     protected Sequence(Parcel in) {
@@ -57,7 +53,6 @@ public class Sequence implements Parcelable {
         difficulty = in.readInt();
         repetition = in.readInt();
         recoveryTime = in.readLong();
-        globalCycleTime = in.readLong();
     }
 
     public static final Creator<Sequence> CREATOR = new Creator<Sequence>() {
@@ -136,14 +131,6 @@ public class Sequence implements Parcelable {
         this.recoveryTime = recoveryTime;
     }
 
-    public long getGlobalCycleTime() {
-        return globalCycleTime;
-    }
-
-    public void setGlobalCycleTime(long globalCycleTime) {
-        this.globalCycleTime = globalCycleTime;
-    }
-
     @Override
     public String toString() {
         return "Sequence{" + "\n\t" +
@@ -155,7 +142,6 @@ public class Sequence implements Parcelable {
                 ", difficulty=" + difficulty + "\n\t" +
                 ", repetition=" + repetition + "\n\t" +
                 ", recoveryTime=" + recoveryTime + "\n\t" +
-                ", globalCycleTime=" + globalCycleTime + "\n" +
                 '}';
     }
 
@@ -174,6 +160,5 @@ public class Sequence implements Parcelable {
         dest.writeInt(difficulty);
         dest.writeInt(repetition);
         dest.writeLong(recoveryTime);
-        dest.writeLong(globalCycleTime);
     }
 }

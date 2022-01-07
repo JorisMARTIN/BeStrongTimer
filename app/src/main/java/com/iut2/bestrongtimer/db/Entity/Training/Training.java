@@ -30,20 +30,12 @@ public class Training implements Parcelable {
 
     @ColumnInfo(name = "setup_time")
     private long setupTime;
-    
-    @ColumnInfo(name = "global_sequence_time")
-    private long globalSequenceTime;
 
-    @ColumnInfo(name = "difficulty_average")
-    private float difficultyAverage;
-
-    public Training(String name, String description, long setupTime, long globalSequenceTime, float difficultyAverage) {
+    public Training(String name, String description, long setupTime) {
         this.name = name;
         this.creationDate = new Date();
         this.description = description;
         this.setupTime = setupTime;
-        this.globalSequenceTime = globalSequenceTime;
-        this.difficultyAverage = difficultyAverage;
     }
 
     protected Training(Parcel in) {
@@ -51,8 +43,6 @@ public class Training implements Parcelable {
         name = in.readString();
         description = in.readString();
         setupTime = in.readLong();
-        globalSequenceTime = in.readLong();
-        difficultyAverage = in.readFloat();
     }
 
     @Override
@@ -61,8 +51,6 @@ public class Training implements Parcelable {
         dest.writeString(name);
         dest.writeString(description);
         dest.writeLong(setupTime);
-        dest.writeLong(globalSequenceTime);
-        dest.writeFloat(difficultyAverage);
     }
 
     @Override
@@ -118,22 +106,6 @@ public class Training implements Parcelable {
         this.setupTime = setupTime;
     }
 
-    public long getGlobalSequenceTime() {
-        return globalSequenceTime;
-    }
-
-    public void setGlobalSequenceTime(long globalSequenceTime) {
-        this.globalSequenceTime = globalSequenceTime;
-    }
-
-    public float getDifficultyAverage() {
-        return difficultyAverage;
-    }
-
-    public void setDifficultyAverage(float difficultyAverage) {
-        this.difficultyAverage = difficultyAverage;
-    }
-
     @Override
     public String toString() {
         return "Training{" + "\n\t" +
@@ -142,7 +114,6 @@ public class Training implements Parcelable {
                 ", description='" + description + '\'' + "\n\t" +
                 ", creationDate=" + creationDate + "\n\t" +
                 ", setupTime=" + setupTime + "\n\t" +
-                ", globalSequenceTime=" + globalSequenceTime + "\n" +
                 '}';
     }
 }

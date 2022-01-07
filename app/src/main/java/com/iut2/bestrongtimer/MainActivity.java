@@ -16,6 +16,7 @@ import com.iut2.bestrongtimer.db.DatabaseClient;
 import com.iut2.bestrongtimer.db.Entity.Training.Training;
 import com.iut2.bestrongtimer.utils.LaunchEditDialog;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -109,19 +110,15 @@ public class MainActivity extends AppCompatActivity {
             TextView title = (TextView) layout.findViewById(R.id.component_training_title);
             TextView description = (TextView) layout.findViewById(R.id.component_training_description);
             TextView date = (TextView) layout.findViewById(R.id.component_training_date);
-            TextView time = (TextView) layout.findViewById(R.id.component_training_globalTime);
-            TextView level = (TextView) layout.findViewById(R.id.component_training_globalLevel);
 
             // Apply training data
             title.setText(training.getName());
             description.setText(training.getDescription());
-            date.setText(training.getCreationDate().toString());
-            time.setText(String.format("%02d min, %02d s",
-                    TimeUnit.MILLISECONDS.toMinutes(training.getGlobalSequenceTime() + training.getSetupTime()),
-                    TimeUnit.MILLISECONDS.toSeconds(training.getGlobalSequenceTime() + training.getSetupTime()) -
-                    TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(training.getGlobalSequenceTime() + training.getSetupTime()))));
 
-            level.setText(training.getDifficultyAverage() + " / 5");
+            SimpleDateFormat formater = new SimpleDateFormat("dd MMM yyyy hh:mm");
+
+            date.setText(formater.format(training.getCreationDate()));
+
             // Add event
             layout.setOnClickListener(new View.OnClickListener() {
                 @Override

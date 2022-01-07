@@ -121,7 +121,7 @@ public class AddEditSequence extends AppCompatActivity implements View.OnClickLi
      */
     private void createSequence(boolean editCyclesOrCloseAfterUpdate) {
 
-        sequence = new Sequence(trainingId, sequences_length + 1, name.getText().toString(), description.getText().toString(), (int) difficulty.getRating(), Integer.parseInt(repetitionLabel.getText().toString()), Long.parseLong(recoveryLabel.getText().toString()) * 1000, 0);
+        sequence = new Sequence(trainingId, sequences_length + 1, name.getText().toString(), description.getText().toString(), (int) difficulty.getRating(), Integer.parseInt(repetitionLabel.getText().toString()), Long.parseLong(recoveryLabel.getText().toString()) * 1000);
 
         class InsertSequence extends AsyncTask<Void, Void, Long> {
 

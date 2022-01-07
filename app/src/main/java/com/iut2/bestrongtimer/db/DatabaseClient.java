@@ -45,12 +45,12 @@ public class DatabaseClient {
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onCreate(db);
 
-            db.execSQL("INSERT INTO training (name, description, setup_time, global_sequence_time, difficulty_average) VALUES(\"Test\", \"Test description\", 5000, 820000, 3.0);");
-
-            // Sequence 1
-            db.execSQL("INSERT INTO sequence (training_id, pos, name, description, difficulty, repetition, recovery_time, global_cycle_time) VALUES (1, 1, \"Test sequence 1\", \"Test Description sequence 1\", 2, 1, 7000, 150000);");
-                // Cycles
-                db.execSQL("INSERT INTO cycle (sequence_id, pos, name, repetition, activity_time, recovery_time) VALUES (1, 1, \"Pompes x 5\", 2, 5000, 3000);");
+//            db.execSQL("INSERT INTO training (name, description, setup_time) VALUES(\"Test\", \"Test description\", 5000);");
+//
+//            // Sequence 1
+//            db.execSQL("INSERT INTO sequence (training_id, pos, name, description, difficulty, repetition, recovery_time) VALUES (1, 1, \"Test sequence 1\", \"Test Description sequence 1\", 2, 1, 7000);");
+//                // Cycles
+//                db.execSQL("INSERT INTO cycle (sequence_id, pos, name, repetition, activity_time, recovery_time) VALUES (1, 1, \"Pompes x 5\", 2, 5000, 3000);");
 
 
             // Trigger to delete linked sequences and list to training

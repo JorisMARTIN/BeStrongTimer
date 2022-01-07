@@ -122,7 +122,7 @@ public class AddEditTraining extends AppCompatActivity implements View.OnClickLi
      */
     private void createTraining(boolean editSequenceOrCloseAfterUpdate) {
 
-        training = new Training(nameInput.getText().toString(), descriptionInput.getText().toString(), Long.parseLong(setupTimeLabel.getText().toString()) * 1000, 0, 0);
+        training = new Training(nameInput.getText().toString(), descriptionInput.getText().toString(), Long.parseLong(setupTimeLabel.getText().toString()) * 1000);
 
         class InsertTraining extends AsyncTask<Void, Void, Long> {
 

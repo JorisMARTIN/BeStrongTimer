@@ -94,17 +94,13 @@ public class TrainingSequences extends AppCompatActivity implements View.OnClick
             // Inflater views
             TextView title = (TextView) layout.findViewById(R.id.component_sequence_title);
             TextView description = (TextView) layout.findViewById(R.id.component_sequence_description);
-            TextView time = (TextView) layout.findViewById(R.id.component_sequence_globalTime);
             TextView repetion = (TextView) layout.findViewById(R.id.component_sequence_repetition);
             TextView level = (TextView) layout.findViewById(R.id.component_sequence_globalLevel);
 
             // Apply sequence data
             title.setText(sequence.getName());
             description.setText(sequence.getDescription());
-            time.setText(String.format("%02d min, %02d s",
-                    TimeUnit.MILLISECONDS.toMinutes(sequence.getGlobalCycleTime() + sequence.getRecoveryTime()),
-                    TimeUnit.MILLISECONDS.toSeconds(sequence.getGlobalCycleTime() + sequence.getRecoveryTime()) -
-                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(sequence.getGlobalCycleTime() + sequence.getRecoveryTime()))));
+
             repetion.setText("x " + sequence.getRepetition());
 
             level.setText(sequence.getDifficulty() + " / 5");
